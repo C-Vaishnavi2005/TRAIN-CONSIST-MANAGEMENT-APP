@@ -1,50 +1,55 @@
-import java.util.Scanner;
-import java.util.regex.*;
+import java.util.*;
+import java.util.stream.*;
+
+// Goods Bogie class
+class GoodsBogie {
+    String shape;     // Rectangular or Cylindrical
+    String cargo;     // type of cargo
+
+    GoodsBogie(String shape, String cargo) {
+        this.shape = shape;
+        this.cargo = cargo;
+    }
+
+    public void display() {
+        System.out.println(shape + " bogie carrying: " + cargo);
+    }
+}
 
 public class TRAINCONSISTMANAGEMENTAPP {
 
-    // Method to validate Train ID
-    public static boolean validateTrainID(String trainID) {
-        // Regex: TRN- followed by 4 digits
-        String regex = "TRN-\\d{4}";
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(trainID);
-        return matcher.matches();
-    }
-
-    // Method to validate Cargo Code
-    public static boolean validateCargoCode(String cargoCode) {
-        // Regex: CG-[A-Z]{3}-\d{2} (example: CG-BOX-12)
-        String regex = "CG-[A-Z]{3}-\\d{2}";
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(cargoCode);
-        return matcher.matches();
-    }
-
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
 
-        System.out.println("===== Train Consist Management App (UC11) =====");
+        System.out.println("===== Train Consist Management App (UC12) =====");
 
-        // Step 1: Get Train ID
-        System.out.print("Enter Train ID (format TRN-1234): ");
-        String trainID = sc.nextLine();
-        if (validateTrainID(trainID)) {
-            System.out.println("Train ID accepted: " + trainID);
+        // Step 1: Create list of goods bogies
+        List<GoodsBogie> goodsBogies = new ArrayList<>();
+        goodsBogies.add(new GoodsBogie("Cylindrical", "Petroleum"));
+        goodsBogies.add(new GoodsBogie("Rectangular", "Coal"));
+        goodsBogies.add(new GoodsBogie("Cylindrical", "Milk"));  // valid liquid
+        goodsBogies.add(new GoodsBogie("Rectangular", "Steel"));
+
+        // Step 2: Safety compliance check using Stream + allMatch
+        boolean isSafe = goodsBogies.stream()
+                .allMatch(b -> {
+                    // Cylindrical bogie must carry liquid cargo only
+                    if (b.shape.equals("Cylindrical")) {
+                        return b.cargo.equalsIgnoreCase("Petroleum") || b.cargo.equalsIgnoreCase("Milk") || b.cargo.equalsIgnoreCase("Oil");
+                    }
+                    // Rectangular can carry any other cargo
+                    return true;
+                });
+
+        // Step 3: Display results
+        System.out.println("Goods bogie details:");
+        goodsBogies.forEach(GoodsBogie::display);
+
+        if (isSafe) {
+            System.out.println("All goods bogies comply with safety rules. Train is safe!");
         } else {
-            System.out.println("Invalid Train ID format!");
-        }
-
-        // Step 2: Get Cargo Code
-        System.out.print("Enter Cargo Code (format CG-XXX-12): ");
-        String cargoCode = sc.nextLine();
-        if (validateCargoCode(cargoCode)) {
-            System.out.println("Cargo Code accepted: " + cargoCode);
-        } else {
-            System.out.println("Invalid Cargo Code format!");
+            System.out.println("Safety violation detected! Train formation is unsafe!");
         }
 
         System.out.println("Program continues...");
-        sc.close();
     }
 }
