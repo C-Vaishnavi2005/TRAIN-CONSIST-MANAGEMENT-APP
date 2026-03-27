@@ -1,48 +1,55 @@
-import java.util.Scanner;
-import java.util.regex.*;
+import java.util.ArrayList;
+import java.util.List;
+
+// Step 1: Custom Exception
+class InvalidCapacityException extends Exception {
+    public InvalidCapacityException(String message) {
+        super(message);
+    }
+}
+
+// Step 2: Passenger Bogie class with capacity validation
+class PassengerBogie {
+    String type;
+    int capacity;
+
+    // Constructor validates capacity
+    public PassengerBogie(String type, int capacity) throws InvalidCapacityException {
+        if (capacity <= 0) {
+            throw new InvalidCapacityException("Invalid capacity for " + type + ": " + capacity);
+        }
+        this.type = type;
+        this.capacity = capacity;
+    }
+
+    public void display() {
+        System.out.println(type + " bogie with capacity: " + capacity);
+    }
+}
 
 public class TRAINCONSISTMANAGEMENTAPP {
-    // Method to validate Train ID
-    public static boolean validateTrainID(String trainID) {
-        // Regex: TRN- followed by 4 digits
-        String regex = "TRN-\\d{4}";
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(trainID);
-        return matcher.matches();
-    }
-
-    // Method to validate Cargo Code
-    public static boolean validateCargoCode(String cargoCode) {
-        // Regex: CG-[A-Z]{3}-\d{2} (example: CG-BOX-12)
-        String regex = "CG-[A-Z]{3}-\\d{2}";
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(cargoCode);
-        return matcher.matches();
-    }
 
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        System.out.println("===== Train Consist Management App (UC11) =====");
 
-        // Step 1: Get Train ID
-        System.out.print("Enter Train ID (format TRN-1234): ");
-        String trainID = sc.nextLine();
-        if (validateTrainID(trainID)) {
-            System.out.println("Train ID accepted: " + trainID);
-        } else {
-            System.out.println("Invalid Train ID format!");
+        System.out.println("===== Train Consist Management App (UC14) =====");
+
+        List<PassengerBogie> bogies = new ArrayList<>();
+
+        try {
+            // Valid bogie
+            bogies.add(new PassengerBogie("Sleeper", 72));
+
+            // Invalid bogie → should throw exception
+            bogies.add(new PassengerBogie("AC Chair", 0));
+
+        } catch (InvalidCapacityException e) {
+            System.out.println("Error: " + e.getMessage());
         }
 
-        // Step 2: Get Cargo Code
-        System.out.print("Enter Cargo Code (format CG-XXX-12): ");
-        String cargoCode = sc.nextLine();
-        if (validateCargoCode(cargoCode)) {
-            System.out.println("Cargo Code accepted: " + cargoCode);
-        } else {
-            System.out.println("Invalid Cargo Code format!");
-        }
+        // Continue safely with valid bogies
+        System.out.println("Valid bogies in the train:");
+        bogies.forEach(PassengerBogie::display);
 
-        System.out.println("Program continues...");
-        sc.close();
+        System.out.println("Program continues safely...");
     }
 }
