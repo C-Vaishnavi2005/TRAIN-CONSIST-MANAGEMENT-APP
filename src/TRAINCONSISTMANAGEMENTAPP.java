@@ -1,9 +1,9 @@
-import java.util.HashSet;
+import java.util.TreeSet;
 
 public class TRAINCONSISTMANAGEMENTAPP {
 
-    // HashSet to store unique bogie IDs
-    static HashSet<String> bogieIDs = new HashSet<>();
+    // TreeSet for sorted + unique bogie IDs
+    static TreeSet<String> bogieIDs = new TreeSet<>();
 
     // Add bogie ID
     public static void addBogieID(String id) {
@@ -14,9 +14,9 @@ public class TRAINCONSISTMANAGEMENTAPP {
         }
     }
 
-    // Display all unique bogie IDs
+    // Display sorted bogie IDs
     public static void displayBogieIDs() {
-        System.out.println("Unique Bogie IDs in Train:");
+        System.out.println("Sorted Bogie IDs (Train Order):");
         for (String id : bogieIDs) {
             System.out.println("- " + id);
         }
@@ -24,17 +24,18 @@ public class TRAINCONSISTMANAGEMENTAPP {
 
     public static void main(String[] args) {
 
-        System.out.println("===== Train Consist Management App (UC3) =====");
+        System.out.println("===== Train Consist Management App (UC4) =====");
 
         // Step 1: Add bogie IDs
+        addBogieID("BG105");
         addBogieID("BG101");
-        addBogieID("BG102");
         addBogieID("BG103");
+        addBogieID("BG102");
 
-        // Step 2: Try adding duplicate
+        // Step 2: Try duplicate
         addBogieID("BG101");
 
-        // Step 3: Display unique IDs
+        // Step 3: Display sorted order
         displayBogieIDs();
 
         System.out.println("Program continues...");
