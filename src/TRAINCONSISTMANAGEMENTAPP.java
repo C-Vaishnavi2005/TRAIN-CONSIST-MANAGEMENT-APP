@@ -1,12 +1,12 @@
-import java.util.TreeSet;
+import java.util.LinkedHashSet;
 
 public class TRAINCONSISTMANAGEMENTAPP {
 
-    // TreeSet for sorted + unique bogie IDs
-    static TreeSet<String> bogieIDs = new TreeSet<>();
+    // LinkedHashSet for ordered + unique bogies
+    static LinkedHashSet<String> bogieIDs = new LinkedHashSet<>();
 
-    // Add bogie ID
-    public static void addBogieID(String id) {
+    // Add bogie
+    public static void addBogie(String id) {
         if (bogieIDs.add(id)) {
             System.out.println(id + " added successfully.");
         } else {
@@ -14,9 +14,9 @@ public class TRAINCONSISTMANAGEMENTAPP {
         }
     }
 
-    // Display sorted bogie IDs
-    public static void displayBogieIDs() {
-        System.out.println("Sorted Bogie IDs (Train Order):");
+    // Display bogies in insertion order
+    public static void displayBogies() {
+        System.out.println("Train Formation (Insertion Order):");
         for (String id : bogieIDs) {
             System.out.println("- " + id);
         }
@@ -24,19 +24,19 @@ public class TRAINCONSISTMANAGEMENTAPP {
 
     public static void main(String[] args) {
 
-        System.out.println("===== Train Consist Management App (UC4) =====");
+        System.out.println("===== Train Consist Management App (UC5) =====");
 
-        // Step 1: Add bogie IDs
-        addBogieID("BG105");
-        addBogieID("BG101");
-        addBogieID("BG103");
-        addBogieID("BG102");
+        // Step 1: Add bogies
+        addBogie("BG101");
+        addBogie("BG105");
+        addBogie("BG102");
+        addBogie("BG103");
 
         // Step 2: Try duplicate
-        addBogieID("BG101");
+        addBogie("BG101");
 
-        // Step 3: Display sorted order
-        displayBogieIDs();
+        // Step 3: Display formation
+        displayBogies();
 
         System.out.println("Program continues...");
     }
